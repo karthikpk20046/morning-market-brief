@@ -10,7 +10,7 @@ const ContentSecurityPolicy = `
   object-src 'none';
   base-uri 'self';
   frame-ancestors 'self';
-`;
+`.replace(/\s{2,}/g, ' ').trim();
 
 const nextConfig = {
   eslint: {
@@ -19,22 +19,18 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  images: { unoptimized: true },
+  images: {
+    unoptimized: true,
+  },
   devIndicators: false,
-  allowedDevOrigins: [
-    "*.macaly.dev",
-    "*.macaly.app",
-    "*.macaly-app.com",
-    "*.macaly-user-data.dev",
-  ],
   async headers() {
     return [
       {
-        source: '/(.*)', // apply to all routes
+        source: '/(.*)',
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim(),
+            value: ContentSecurityPolicy,
           },
         ],
       },
